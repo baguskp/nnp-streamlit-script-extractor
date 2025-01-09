@@ -2,8 +2,7 @@ import streamlit as st
 import pandas as pd
 import re
 from io import StringIO
-from st_aggrid import AgGrid, GridOptionsBuilder
-import locale
+
 
 
 st.set_page_config(layout="wide")
