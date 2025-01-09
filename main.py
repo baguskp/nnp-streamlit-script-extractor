@@ -36,9 +36,10 @@ if uploaded_file is not None:
     # Assign column names to the new DataFrame
     split_df.columns = ['date', 'time', 'id', 'value', 'ip', 'mac', 'duration', 'code', 'status']
     split_df['id'] = split_df['id'].str.replace(' ', '').str.replace('-', '').str.replace('\\', '')
-    split_df['status']=split_df['status'].str.replace(' ', '')
+    split_df['status'] = split_df['status'].str.replace('\\', '').str.replace(' ', '')
     split_df['time'] = split_df['time'].str.replace('-', '')
     split_df['value'] = split_df['value'].astype(int)
+
 
     # Convert 'date' column to title case to match the format
     split_df['date'] = split_df['date'].str.title()
