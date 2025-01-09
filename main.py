@@ -48,7 +48,6 @@ if uploaded_file is not None:
     split_df['month_year'] = split_df['date'].dt.to_period('M')
 
     # Calculate total_jual and format it as currency
-    locale.setlocale(locale.LC_ALL, 'id_ID.UTF-8')
     total_jual = split_df['value'].sum()
 
     first_date = split_df['date'].min()
