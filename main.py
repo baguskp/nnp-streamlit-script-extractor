@@ -50,14 +50,13 @@ if uploaded_file is not None:
     # Calculate total_jual and format it as currency
     locale.setlocale(locale.LC_ALL, 'id_ID.UTF-8')
     total_jual = split_df['value'].sum()
-    total_jual_formatted = locale.currency(total_jual, grouping=True)
 
     first_date = split_df['date'].min()
     # Get the end date (last date in the sorted 'date' column)
     end_date = split_df['date'].max()
     # Display the formatted total_jual
     st.metric(label=f"Total Jual Periode {first_date} - {end_date}",
-              value=total_jual_formatted)
+              value=f"Rp. {total_jual:,.0f}".replace(",", "."))
 
     # Group by 'month_year' and sum the 'value' column
     grouped_df = split_df.groupby('month_year')['value'].sum().reset_index()
@@ -74,7 +73,7 @@ if uploaded_file is not None:
 
         st.subheader('DATA YANG DI UPLOAD')
         total_jual_true = split_df[split_df['id'].duplicated(keep=False)].groupby('month_year')['value'].sum().sum()
-        st.metric(label="PENDAPATAN  BERSIH", value=locale.currency(total_jual-total_jual_true, grouping=True))
+        st.metric(label="PENDAPATAN  BERSIH", value=f"Rp. {total_jual - total_jual_true:,.0f}".replace(",", "."))
 
         st.subheader('DATA YANG DI UPLOAD')
         st.dataframe(split_df)
@@ -82,7 +81,7 @@ if uploaded_file is not None:
     with colb:
 
         st.subheader ('Total Kemungkinan Kerugian')
-        st.metric(label="PENDAPATAN TERDUPLIKAT", value=locale.currency(total_jual_true, grouping=True))
+        st.metric(label="PENDAPATAN TERDUPLIKAT", value=f"Rp. {total_jual_true:,.0f}".replace(",", "."))
 
         st.subheader('ID YANG DUPLIKAT DAN DI GUNAKAN KEMBALI')
         st.dataframe(duplicated_df)
