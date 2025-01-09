@@ -2,8 +2,7 @@ import streamlit as st
 import pandas as pd
 import re
 from io import StringIO
-
-
+import locale
 
 st.set_page_config(layout="wide")
 st.title('Script Translator')
@@ -39,17 +38,26 @@ if uploaded_file is not None:
     split_df['time'] = split_df['time'].str.replace('-', '')
     split_df['value'] = split_df['value'].astype(int)
 
-    # Convert 'date' column to datetime format
+    # Convert 'date' column to title case to match the format
+    split_df['date'] = split_df['date'].str.title()
+
+    # Convert 'date' column to datetime format with dayfirst=True
     split_df['date'] = pd.to_datetime(split_df['date'], format='%b/%d/%Y')
+
     # Extract month and year
     split_df['month_year'] = split_df['date'].dt.to_period('M')
 
     # Calculate total_jual and format it as currency
+    locale.setlocale(locale.LC_ALL, 'id_ID.UTF-8')
     total_jual = split_df['value'].sum()
-    # total_jual_formatted = locale.currency(total_jual, grouping=True)
+    total_jual_formatted = locale.currency(total_jual, grouping=True)
 
+    first_date = split_df['date'].min()
+    # Get the end date (last date in the sorted 'date' column)
+    end_date = split_df['date'].max()
     # Display the formatted total_jual
-    st.metric(label="Total Jual", value=total_jual)
+    st.metric(label=f"Total Jual Periode {first_date} - {end_date}",
+              value=total_jual_formatted)
 
     # Group by 'month_year' and sum the 'value' column
     grouped_df = split_df.groupby('month_year')['value'].sum().reset_index()
@@ -66,7 +74,7 @@ if uploaded_file is not None:
 
         st.subheader('DATA YANG DI UPLOAD')
         total_jual_true = split_df[split_df['id'].duplicated(keep=False)].groupby('month_year')['value'].sum().sum()
-        st.metric(label="PENDAPATAN  BERSIH", value=total_jual-total_jual_true)
+        st.metric(label="PENDAPATAN  BERSIH", value=locale.currency(total_jual-total_jual_true, grouping=True))
 
         st.subheader('DATA YANG DI UPLOAD')
         st.dataframe(split_df)
@@ -74,7 +82,7 @@ if uploaded_file is not None:
     with colb:
 
         st.subheader ('Total Kemungkinan Kerugian')
-        st.metric(label="PENDAPATAN TERDUPLIKAT", value=total_jual_true)
+        st.metric(label="PENDAPATAN TERDUPLIKAT", value=locale.currency(total_jual_true, grouping=True))
 
         st.subheader('ID YANG DUPLIKAT DAN DI GUNAKAN KEMBALI')
         st.dataframe(duplicated_df)
