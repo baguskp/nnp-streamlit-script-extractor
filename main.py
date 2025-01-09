@@ -8,8 +8,9 @@ st.title('MIKHMON SYSTEM SCRIPT TRANSLATOR By MikrotikRumahan')
 st.write('Aplikasi ini digunakan untuk menerjemahkan script yang dihasilkan oleh Mikrotik Hotspot System ke dalam bentuk tabel yang lebih mudah dibaca.')
 st.write('Untuk melakukan ekstraksi, silahkan upload file export script dengan format .rsc, gunakan fungsi /system/script/export file=namafile.rsc pada terminal mikrotik anda')
 st.write('Tested untuk ROS 7.12.1')
-# Read the file content
 
+
+#upload file
 uploaded_file = st.file_uploader("Choose a file")
 if uploaded_file is not None:
 
