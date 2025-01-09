@@ -39,6 +39,7 @@ if uploaded_file is not None:
     split_df['status'] = split_df['status'].str.replace('\\', '').str.replace(' ', '')
     split_df['time'] = split_df['time'].str.replace('-', '')
     split_df['value'] = split_df['value'].astype(int)
+    split_df['status'] = split_df['status'].str.replace(' ', '')
 
 
     # Convert 'date' column to title case to match the format
